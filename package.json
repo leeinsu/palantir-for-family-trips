@@ -8,19 +8,21 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "node --test",
+    "api": "node server/index.mjs",
     "db:apply": "node scripts/apply_db_schema.mjs"
   },
   "keywords": [
     "react",
     "vite",
-    "google-maps",
+    "openstreetmap",
+    "open-map",
     "dashboard",
     "trip-planner"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@googlemaps/js-api-loader": "^2.0.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.7.0",

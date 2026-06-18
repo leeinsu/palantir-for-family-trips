@@ -37,7 +37,7 @@ The repo is intentionally overbuilt for a small real-life use case. That is the 
 
 - React 19
 - Vite
-- Google Maps JavaScript API
+- OpenStreetMap-compatible Open Map surface
 - Lucide icons
 - Framer Motion
 
@@ -53,19 +53,16 @@ Open `http://127.0.0.1:5173` or whatever Vite prints.
 
 ## Environment
 
-For the full map experience, add a browser Maps key to `.env`:
+Open Map configuration is optional. Defaults use an OpenStreetMap-compatible tile URL and local API proxy paths:
 
 ```bash
-VITE_GOOGLE_MAPS_API_KEY=your_browser_maps_key_here
+VITE_MAP_PROVIDER=openstreetmap
+VITE_MAP_TILE_URL=https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+VITE_GEOCODING_API_BASE=/api/maps/geocode
+VITE_ROUTING_API_BASE=/api/maps/routes
 ```
 
-Optional:
-
-```bash
-VITE_GOOGLE_MAP_ID=your_optional_google_map_id
-```
-
-Without a key, the app still renders its UI but the live Google map layer will not fully initialize.
+Server-side MariaDB values belong in `.env.local`, not browser-exposed `VITE_*` variables.
 
 ## Data / Privacy
 
@@ -75,7 +72,7 @@ The trip data in this repo is intentionally sanitized for public sharing.
 - The basecamp address is generalized.
 - Access instructions, Wi-Fi, host details, and other private trip notes are removed.
 
-If you publish this with your own Google Maps key, usage is billed to your Google Cloud project.
+If you publish this with external map/search/route providers, review each provider's usage policy and rate limits.
 
 ## Repo Notes
 

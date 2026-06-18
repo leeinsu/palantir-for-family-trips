@@ -35,12 +35,12 @@ const PUBLIC_BASECAMP_COORDINATES = { lat: 37.8586, lng: -120.2142 }
 
 const MAPS_LINKS = {
   airbnb: TRIP_META.airbnb.url,
-  grill: 'https://www.google.com/maps/search/?api=1&query=The+Grill+at+Pine+Mountain+Lake',
-  twoGuys: 'https://www.google.com/maps/search/?api=1&query=Two+Guys+Pizza+Pies+Groveland',
-  mountainRoom: 'https://www.google.com/maps/search/?api=1&query=The+Mountain+Room+Yosemite',
-  priestStation: 'https://www.google.com/maps/search/?api=1&query=Priest+Station+Cafe',
-  aroundHorn: 'https://www.google.com/maps/search/?api=1&query=Around+The+Horn+Brewing+Company+Groveland',
-  yosemite: 'https://www.google.com/maps/search/?api=1&query=Big+Oak+Flat+Entrance+Yosemite',
+  grill: 'https://www.openstreetmap.org/search?query=The+Grill+at+Pine+Mountain+Lake',
+  twoGuys: 'https://www.openstreetmap.org/search?query=Two+Guys+Pizza+Pies+Groveland',
+  mountainRoom: 'https://www.openstreetmap.org/search?query=The+Mountain+Room+Yosemite',
+  priestStation: 'https://www.openstreetmap.org/search?query=Priest+Station+Cafe',
+  aroundHorn: 'https://www.openstreetmap.org/search?query=Around+The+Horn+Brewing+Company+Groveland',
+  yosemite: 'https://www.openstreetmap.org/search?query=Big+Oak+Flat+Entrance+Yosemite',
 }
 
 const SHARED_CONVOY_WINDOWS = {
@@ -391,7 +391,7 @@ function buildLocations() {
       placesQuery: 'Bravo Farms Kettleman City CA',
       address: '19950 Bernard Dr, Kettleman City, CA 93239',
       coordinates: { lat: 35.9934, lng: -119.9617 },
-      externalUrl: 'https://www.google.com/maps/search/?api=1&query=Bravo+Farms+Kettleman+City',
+      externalUrl: 'https://www.openstreetmap.org/search?query=Bravo+Farms+Kettleman+City',
       summary: 'Good halfway lunch + restroom + leg-stretch stop on the LA inbound drive.',
       linkedEntityKeys: [
         makeEntityKey('family', 'north-star'),
@@ -409,7 +409,7 @@ function buildLocations() {
       placesQuery: 'Oakdale Cheese & Specialties Oakdale CA',
       address: '10040 CA-120, Oakdale, CA 95361',
       coordinates: { lat: 37.7975, lng: -120.8108 },
-      externalUrl: 'https://www.google.com/maps/search/?api=1&query=Oakdale+Cheese+%26+Specialties',
+      externalUrl: 'https://www.openstreetmap.org/search?query=Oakdale+Cheese+%26+Specialties',
       summary:
         'Strong shared stop on the Highway 120 approach: grilled cheese, picnic tables, animal pens, bathrooms, and enough room for the kids to reset before the final leg.',
       linkedEntityKeys: [
@@ -503,7 +503,7 @@ function buildLocations() {
       dayId: 'fri',
       address: 'Pine Mountain Lake Marina Beach area',
       coordinates: { lat: 37.8604, lng: -120.2019 },
-      externalUrl: 'https://www.google.com/maps/search/?api=1&query=Pine+Mountain+Lake+Beach',
+      externalUrl: 'https://www.openstreetmap.org/search?query=Pine+Mountain+Lake+Beach',
       summary: 'Friday low-logistics activity zone. Flexible, kid-friendly, and close to basecamp.',
       photos: LOCATION_MEDIA['pine-airbnb'],
       linkedEntityKeys: [
@@ -536,7 +536,7 @@ function buildLocations() {
       dayId: 'sat',
       address: 'Big Oak Flat Rd entrance checkpoint',
       coordinates: { lat: 37.8108, lng: -119.8744 },
-      externalUrl: 'https://www.google.com/maps/search/?api=1&query=Big+Oak+Flat+Entrance',
+      externalUrl: 'https://www.openstreetmap.org/search?query=Big+Oak+Flat+Entrance',
       summary: 'Useful checkpoint for Saturday traffic and park-entry readiness.',
       linkedEntityKeys: [makeEntityKey('activity', 'sat-yosemite')],
       photos: LOCATION_MEDIA.yosemite,
@@ -549,7 +549,7 @@ function buildLocations() {
       dayId: 'fri',
       address: 'Groveland, CA',
       coordinates: { lat: 37.8381, lng: -120.2302 },
-      externalUrl: 'https://www.google.com/maps/search/?api=1&query=Groveland+Grocery',
+      externalUrl: 'https://www.openstreetmap.org/search?query=Groveland+Grocery',
       summary: 'Best final restock point before lake day and cook-in meals.',
       linkedEntityKeys: [
         makeEntityKey('itineraryItem', 'groceries'),
@@ -565,7 +565,7 @@ function buildLocations() {
       dayId: 'thu',
       address: 'Groveland, CA',
       coordinates: { lat: 37.8396, lng: -120.2314 },
-      externalUrl: 'https://www.google.com/maps/search/?api=1&query=Groveland+Gas',
+      externalUrl: 'https://www.openstreetmap.org/search?query=Groveland+Gas',
       summary: 'Last easy logistics stop before final basecamp arrival.',
       linkedEntityKeys: [
         makeEntityKey('family', 'north-star'),
