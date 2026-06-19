@@ -1,84 +1,100 @@
 import { useState } from 'react'
-import { createLocalSession, writeLocalSession } from './session.js'
+import { createPasswordSession, createSsoSession, writeLocalSession } from './session.js'
+
+const SSO_PROVIDERS = [
+  { id: 'google', label: 'Google SSO' },
+  { id: 'apple', label: 'Apple SSO' },
+  { id: 'microsoft', label: 'Microsoft SSO' },
+]
 
 export default function AuthPage({ onAuthenticated }) {
-  const [mode, setMode] = useState('login')
-  const [email, setEmail] = useState('family@example.com')
-  const [displayName, setDisplayName] = useState('Family Planner')
+  const [loginId, setLoginId] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  function handleSubmit(event) {
+  function completeAuthentication(session) {
+    writeLocalSession(session)
+    onAuthenticated(session)
+  }
+
+  function handlePasswordLogin(event) {
     event.preventDefault()
     setError('')
 
     try {
-      const session = createLocalSession({ email, displayName })
-      writeLocalSession(session)
-      onAuthenticated(session)
+      completeAuthentication(createPasswordSession({ id: loginId, password }))
     } catch (authError) {
-      setError(authError.message || 'Unable to start a local session')
+      setError(authError.message || 'Unable to sign in')
+    }
+  }
+
+  function handleSsoLogin(provider) {
+    setError('')
+
+    try {
+      completeAuthentication(createSsoSession({ provider }))
+    } catch (authError) {
+      setError(authError.message || 'Unable to start SSO login')
     }
   }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#05070a] px-6 text-slate-100">
       <section className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-950/90 p-8 shadow-2xl shadow-cyan-950/20">
-        <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">Auth MVP</p>
-        <h1 className="mt-4 text-3xl font-semibold">Family Trip Command Center</h1>
+        <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">Authentication</p>
+        <h1 className="mt-4 text-3xl font-semibold">로그인</h1>
         <p className="mt-3 text-sm leading-6 text-slate-400">
-          Use the local session fallback now; the form shape follows the planned `/api/auth/login` and `/api/auth/register` endpoints.
+          여행 데이터를 보려면 ID/password로 인증하거나 SSO 로그인을 사용하세요.
         </p>
 
-        <div className="mt-6 grid grid-cols-2 rounded-2xl border border-slate-800 bg-slate-900/70 p-1 text-sm">
-          {['login', 'register'].map((nextMode) => (
-            <button
-              key={nextMode}
-              className={`rounded-xl px-4 py-2 font-medium transition ${mode === nextMode ? 'bg-cyan-400 text-slate-950' : 'text-slate-400 hover:text-slate-100'}`}
-              type="button"
-              onClick={() => setMode(nextMode)}
-            >
-              {nextMode === 'login' ? 'Login' : 'Register'}
-            </button>
-          ))}
-        </div>
-
-        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-5" onSubmit={handlePasswordLogin}>
           <label className="block text-sm font-medium text-slate-300">
-            Email
+            ID
             <input
+              autoComplete="username"
               className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              placeholder="ID를 입력하세요"
+              value={loginId}
+              onChange={(event) => setLoginId(event.target.value)}
               required
             />
           </label>
-          {mode === 'register' ? (
-            <label className="block text-sm font-medium text-slate-300">
-              Display name
-              <input
-                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400"
-                value={displayName}
-                onChange={(event) => setDisplayName(event.target.value)}
-                required
-              />
-            </label>
-          ) : null}
           <label className="block text-sm font-medium text-slate-300">
             Password
             <input
+              autoComplete="current-password"
               className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400"
+              placeholder="Password를 입력하세요"
               type="password"
-              placeholder="Local MVP accepts any non-empty password"
-              minLength={1}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               required
             />
           </label>
           {error ? <p className="rounded-xl border border-red-900/60 bg-red-950/50 px-4 py-3 text-sm text-red-200">{error}</p> : null}
           <button className="w-full rounded-xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950 transition hover:bg-cyan-300" type="submit">
-            {mode === 'login' ? 'Login with local session' : 'Register local session'}
+            ID / Password 로그인
           </button>
         </form>
+
+        <div className="my-7 flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500">
+          <span className="h-px flex-1 bg-slate-800" />
+          or sso
+          <span className="h-px flex-1 bg-slate-800" />
+        </div>
+
+        <div className="grid gap-3">
+          {SSO_PROVIDERS.map((provider) => (
+            <button
+              key={provider.id}
+              className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 font-semibold text-slate-100 transition hover:border-cyan-400 hover:text-cyan-200"
+              type="button"
+              onClick={() => handleSsoLogin(provider.id)}
+            >
+              {provider.label}
+            </button>
+          ))}
+        </div>
       </section>
     </main>
   )

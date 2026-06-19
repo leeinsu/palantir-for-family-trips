@@ -3,13 +3,17 @@ import App from './App.jsx'
 import AuthPage from './auth/AuthPage.jsx'
 import { clearLocalSession, getInitialSession, LOCAL_SESSION_STORAGE_KEY, readLocalSession } from './auth/session.js'
 
+let authCompletedInThisRuntime = false
+
 export default function Root() {
   const [session, setSession] = useState(() => getInitialSession())
 
   useEffect(() => {
     function handleStorage(event) {
       if (!event.key || event.key === LOCAL_SESSION_STORAGE_KEY) {
-        setSession(readLocalSession())
+        const nextSession = readLocalSession()
+        authCompletedInThisRuntime = Boolean(nextSession)
+        setSession(nextSession)
       }
     }
 
@@ -17,7 +21,12 @@ export default function Root() {
     return () => window.removeEventListener('storage', handleStorage)
   }, [])
 
-  if (!session) return <AuthPage onAuthenticated={setSession} />
+  function handleAuthenticated(nextSession) {
+    authCompletedInThisRuntime = true
+    setSession(nextSession)
+  }
+
+  if (!authCompletedInThisRuntime || !session) return <AuthPage onAuthenticated={handleAuthenticated} />
 
   return (
     <>
@@ -27,6 +36,7 @@ export default function Root() {
           className="rounded-full border border-slate-700 px-3 py-1 text-slate-200 hover:border-cyan-400 hover:text-cyan-200"
           type="button"
           onClick={() => {
+            authCompletedInThisRuntime = false
             clearLocalSession()
             setSession(null)
           }}

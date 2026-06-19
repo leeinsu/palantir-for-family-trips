@@ -4,9 +4,12 @@ import assert from 'node:assert/strict'
 import {
   clearLocalSession,
   createLocalSession,
+  createPasswordSession,
+  createSsoSession,
   LOCAL_SESSION_STORAGE_KEY,
   getInitialSession,
   normalizeEmail,
+  normalizeLoginId,
   parseLocalSession,
   readLocalSession,
   writeLocalSession,
@@ -25,6 +28,10 @@ test('normalizeEmail trims and lowercases emails', () => {
   assert.equal(normalizeEmail('  Family@Example.COM '), 'family@example.com')
 })
 
+test('normalizeLoginId trims ids without requiring email shape', () => {
+  assert.equal(normalizeLoginId('  Wombat_01  '), 'Wombat_01')
+})
+
 test('createLocalSession creates a deterministic local demo session', () => {
   const session = createLocalSession(
     { email: ' FAMILY@Example.com ', displayName: ' Family Planner ' },
@@ -37,6 +44,34 @@ test('createLocalSession creates a deterministic local demo session', () => {
   assert.equal(session.user.displayName, 'Family Planner')
   assert.equal(session.issuedAt, '2026-06-17T00:00:00.000Z')
   assert.equal(session.accessToken, 'local-demo:family@example.com:2026-06-17T00:00:00.000Z')
+})
+
+test('createPasswordSession authenticates with id and password fields', () => {
+  const session = createPasswordSession(
+    { id: ' wombat ', password: 'secret-password' },
+    new Date('2026-06-17T02:00:00.000Z'),
+  )
+
+  assert.equal(session.authProvider, 'password')
+  assert.equal(session.user.id, 'wombat')
+  assert.equal(session.user.displayName, 'wombat')
+  assert.equal(session.issuedAt, '2026-06-17T02:00:00.000Z')
+  assert.equal(session.accessToken, 'password:wombat:2026-06-17T02:00:00.000Z')
+  assert.throws(() => createPasswordSession({ id: '', password: 'secret-password' }), /ID is required/)
+  assert.throws(() => createPasswordSession({ id: 'wombat', password: '' }), /Password is required/)
+})
+
+test('createSsoSession creates a supported SSO session', () => {
+  const session = createSsoSession(
+    { provider: 'google', subject: 'google-user-1', displayName: 'Google User' },
+    new Date('2026-06-17T03:00:00.000Z'),
+  )
+
+  assert.equal(session.authProvider, 'sso:google')
+  assert.equal(session.user.id, 'google:google-user-1')
+  assert.equal(session.user.displayName, 'Google User')
+  assert.equal(session.accessToken, 'sso:google:google-user-1:2026-06-17T03:00:00.000Z')
+  assert.throws(() => createSsoSession({ provider: 'unknown' }), /Unsupported SSO provider/)
 })
 
 test('parseLocalSession rejects invalid session payloads', () => {
