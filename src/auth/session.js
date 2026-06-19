@@ -56,6 +56,12 @@ export function readLocalSession(storage = globalThis.localStorage) {
   return parseLocalSession(storage.getItem(LOCAL_SESSION_STORAGE_KEY))
 }
 
+export function getInitialSession(options = {}, storage = globalThis.localStorage) {
+  const { requireAuthOnFirstScreen = true } = options
+  if (requireAuthOnFirstScreen) return null
+  return readLocalSession(storage)
+}
+
 export function writeLocalSession(session, storage = globalThis.localStorage) {
   if (!storage?.setItem) return session
   storage.setItem(LOCAL_SESSION_STORAGE_KEY, JSON.stringify(session))

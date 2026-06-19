@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import App from './App.jsx'
 import AuthPage from './auth/AuthPage.jsx'
-import { clearLocalSession, LOCAL_SESSION_STORAGE_KEY, readLocalSession } from './auth/session.js'
+import { clearLocalSession, getInitialSession, LOCAL_SESSION_STORAGE_KEY, readLocalSession } from './auth/session.js'
 
 export default function Root() {
-  const [session, setSession] = useState(() => readLocalSession())
+  const [session, setSession] = useState(() => getInitialSession())
 
   useEffect(() => {
     function handleStorage(event) {

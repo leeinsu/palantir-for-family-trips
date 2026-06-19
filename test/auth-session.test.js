@@ -5,6 +5,7 @@ import {
   clearLocalSession,
   createLocalSession,
   LOCAL_SESSION_STORAGE_KEY,
+  getInitialSession,
   normalizeEmail,
   parseLocalSession,
   readLocalSession,
@@ -53,4 +54,14 @@ test('read/write/clear local session works with storage abstraction', () => {
   assert.deepEqual(readLocalSession(storage), session)
   clearLocalSession(storage)
   assert.equal(readLocalSession(storage), null)
+})
+
+test('getInitialSession starts at auth screen even when a session exists by default', () => {
+  const storage = memoryStorage()
+  const session = createLocalSession({ email: 'pilot@example.com' }, new Date('2026-06-17T01:00:00.000Z'))
+
+  writeLocalSession(session, storage)
+
+  assert.equal(getInitialSession({}, storage), null)
+  assert.deepEqual(getInitialSession({ requireAuthOnFirstScreen: false }, storage), session)
 })
