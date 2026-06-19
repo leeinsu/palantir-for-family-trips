@@ -1,0 +1,3 @@
+# Hermes / ripgrep ignore
+# Do not inspect Obsidian metadata under plan notes.
+plan/.obsidian/

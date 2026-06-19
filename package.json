@@ -5,9 +5,9 @@
   "description": "A Palantir-style family trip command center for a Yosemite weekend.",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --host 0.0.0.0",
     "test": "node --test",
     "api": "node server/index.mjs",
     "db:apply": "node scripts/apply_db_schema.mjs"
